@@ -2,8 +2,8 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-95829225.js');
-const setProperty = require('./set-property-4f065a91.js');
+const index = require('./index-5f6f12ab.js');
+const setProperty = require('./set-property-88176225.js');
 
 function of(...args) {
     const scheduler = setProperty.popScheduler(args);

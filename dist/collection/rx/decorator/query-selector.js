@@ -21,7 +21,7 @@ export function QuerySelector(selector, shadowRoot = false) {
           if (shadowRoot) {
             root = root.shadowRoot;
           }
-          this[observableProperty] = renderObservable(this).pipe(map(() => root.querySelector(selector)), startWith(null), distinctUntilChanged(), shareReplay(1));
+          this[observableProperty] = renderObservable(this).pipe(startWith(), map(() => root.querySelector(selector)), distinctUntilChanged(), shareReplay(1));
         }
         return this[observableProperty];
       },

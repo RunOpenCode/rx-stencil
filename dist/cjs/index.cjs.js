@@ -2,8 +2,8 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-95829225.js');
-const setProperty = require('./set-property-4f065a91.js');
+const index = require('./index-5f6f12ab.js');
+const setProperty = require('./set-property-88176225.js');
 
 const dateTimestampProvider = {
     now() {
@@ -331,7 +331,7 @@ function QuerySelector(selector, shadowRoot = false) {
           if (shadowRoot) {
             root = root.shadowRoot;
           }
-          this[observableProperty] = renderObservable(this).pipe(map(() => root.querySelector(selector)), startWith(null), setProperty.distinctUntilChanged(), shareReplay(1));
+          this[observableProperty] = renderObservable(this).pipe(startWith(), map(() => root.querySelector(selector)), setProperty.distinctUntilChanged(), shareReplay(1));
         }
         return this[observableProperty];
       },
@@ -360,7 +360,7 @@ function QuerySelectorAll(selector, shadowRoot = false) {
           if (shadowRoot) {
             root = root.shadowRoot;
           }
-          this[observableProperty] = renderObservable(this).pipe(map(() => Array.from(root.querySelectorAll(selector))), startWith([]), setProperty.distinctUntilChanged((previous, current) => {
+          this[observableProperty] = renderObservable(this).pipe(startWith(), map(() => Array.from(root.querySelectorAll(selector))), setProperty.distinctUntilChanged((previous, current) => {
             if (previous.length !== current.length) {
               return false;
             }

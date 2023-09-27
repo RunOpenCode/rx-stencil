@@ -48,7 +48,7 @@ export class Async {
           "references": {
             "AsyncValue": {
               "location": "local",
-              "path": "/Users/thecelavi/Sites/RunOpenCode/stenciljs-libs/rx-stenciljs/src/components/async/async.tsx",
+              "path": "/Users/thecelavi/Sites/RunOpenCode/stencil-libs/rx-stencil/src/components/async/async.tsx",
               "id": "src/components/async/async.tsx::AsyncValue"
             }
           }

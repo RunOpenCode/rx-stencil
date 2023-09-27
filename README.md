@@ -1,4 +1,4 @@
-# @runopencode/rx-stenciljs
+# @runopencode/rx-stencil
 
 This is a small utility library which provides a set of useful functions for working with StencilJS components in
 conjunction with RxJS. RxJS is not, in general, well integrated with StencilJS, nor core concepts of StencilJS in regard

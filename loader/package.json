@@ -1,5 +1,5 @@
 {
-  "name": "rx-stenciljs-loader",
+  "name": "rx-stencil-loader",
   "private": true,
   "typings": "./index.d.ts",
   "module": "./index.js",

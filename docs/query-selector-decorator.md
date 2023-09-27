@@ -56,7 +56,7 @@ import {
     switchMap,
 } from 'rxjs';
 import { fromFetch } from 'rxjs/internal/observable/dom/fetch';
-import { untilDisconnected } from '@runopencode/rx-stenciljs';
+import { untilDisconnected } from '@runopencode/rx-stencil';
 
 @Component({
     tag: 'app-search',

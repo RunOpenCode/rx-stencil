@@ -1,6 +1,6 @@
-import { g as getElement, f as forceUpdate } from './index-b563d87d.js';
-import { S as Subject, o as operate, c as createOperatorSubscriber, i as innerFrom, e as executeSchedule, a as isFunction, b as identity, f as from, p as popScheduler, d as SafeSubscriber, n as noop, O as Observable, g as distinctUntilChanged, h as getPropertyDescriptor } from './set-property-f012d63a.js';
-export { j as propertyObservable, s as setProperty } from './set-property-f012d63a.js';
+import { g as getElement, f as forceUpdate } from './index-9102de09.js';
+import { S as Subject, o as operate, c as createOperatorSubscriber, i as innerFrom, e as executeSchedule, a as isFunction, b as identity, f as from, p as popScheduler, d as SafeSubscriber, n as noop, O as Observable, g as distinctUntilChanged, h as getPropertyDescriptor } from './set-property-7fa82bef.js';
+export { j as propertyObservable, s as setProperty } from './set-property-7fa82bef.js';
 
 const dateTimestampProvider = {
     now() {
@@ -328,7 +328,7 @@ function QuerySelector(selector, shadowRoot = false) {
           if (shadowRoot) {
             root = root.shadowRoot;
           }
-          this[observableProperty] = renderObservable(this).pipe(map(() => root.querySelector(selector)), startWith(null), distinctUntilChanged(), shareReplay(1));
+          this[observableProperty] = renderObservable(this).pipe(startWith(), map(() => root.querySelector(selector)), distinctUntilChanged(), shareReplay(1));
         }
         return this[observableProperty];
       },
@@ -357,7 +357,7 @@ function QuerySelectorAll(selector, shadowRoot = false) {
           if (shadowRoot) {
             root = root.shadowRoot;
           }
-          this[observableProperty] = renderObservable(this).pipe(map(() => Array.from(root.querySelectorAll(selector))), startWith([]), distinctUntilChanged((previous, current) => {
+          this[observableProperty] = renderObservable(this).pipe(startWith(), map(() => Array.from(root.querySelectorAll(selector))), distinctUntilChanged((previous, current) => {
             if (previous.length !== current.length) {
               return false;
             }

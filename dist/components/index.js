@@ -329,7 +329,7 @@ function QuerySelector(selector, shadowRoot = false) {
           if (shadowRoot) {
             root = root.shadowRoot;
           }
-          this[observableProperty] = renderObservable(this).pipe(map(() => root.querySelector(selector)), startWith(null), distinctUntilChanged(), shareReplay(1));
+          this[observableProperty] = renderObservable(this).pipe(startWith(), map(() => root.querySelector(selector)), distinctUntilChanged(), shareReplay(1));
         }
         return this[observableProperty];
       },
@@ -358,7 +358,7 @@ function QuerySelectorAll(selector, shadowRoot = false) {
           if (shadowRoot) {
             root = root.shadowRoot;
           }
-          this[observableProperty] = renderObservable(this).pipe(map(() => Array.from(root.querySelectorAll(selector))), startWith([]), distinctUntilChanged((previous, current) => {
+          this[observableProperty] = renderObservable(this).pipe(startWith(), map(() => Array.from(root.querySelectorAll(selector))), distinctUntilChanged((previous, current) => {
             if (previous.length !== current.length) {
               return false;
             }

@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-95829225.js');
+const index = require('./index-5f6f12ab.js');
 
 const defineCustomElements = (win, options) => {
   if (typeof window === 'undefined') return undefined;

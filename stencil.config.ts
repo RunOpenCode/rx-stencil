@@ -1,7 +1,7 @@
 import { Config } from '@stencil/core';
 
 export const config: Config = {
-    namespace:     'rx-stenciljs',
+    namespace:     'rx-stencil',
     outputTargets: [
         {
             type:          'dist',

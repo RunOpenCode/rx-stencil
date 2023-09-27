@@ -1,7 +1,7 @@
 {
-    "name": "@runopencode/rx-stenciljs",
+    "name": "@runopencode/rx-stencil",
     "version": "0.4.0",
-    "description": "RXJS utilities for StencilJS",
+    "description": "ReactiveX (RxJS) utilities for Stencil",
     "main": "dist/index.cjs.js",
     "module": "dist/index.js",
     "es2015": "dist/esm/index.mjs",
@@ -9,10 +9,10 @@
     "types": "dist/types/index.d.ts",
     "collection": "dist/collection/collection-manifest.json",
     "collection:main": "dist/collection/index.js",
-    "unpkg": "dist/rx-stenciljs/rx-stenciljs.esm.js",
+    "unpkg": "dist/rx-stencil/rx-stencil.esm.js",
     "repository": {
         "type": "git",
-        "url": "https://github.com/ionic-team/stencil-component-starter.git"
+        "url": "https://github.com/RunOpenCode/rx-stencil"
     },
     "files": [
         "dist/",
@@ -29,7 +29,7 @@
         "@stencil/core": "^4.0.0"
     },
     "peerDependencies": {
-        "rxjs": "^7.8.1"
+        "rxjs": "^7.0"
     },
     "devDependencies": {
         "@types/jest": "^27.5.2",

@@ -21,7 +21,7 @@ export function QuerySelectorAll(selector, shadowRoot = false) {
           if (shadowRoot) {
             root = root.shadowRoot;
           }
-          this[observableProperty] = renderObservable(this).pipe(map(() => Array.from(root.querySelectorAll(selector))), startWith([]), distinctUntilChanged((previous, current) => {
+          this[observableProperty] = renderObservable(this).pipe(startWith(), map(() => Array.from(root.querySelectorAll(selector))), distinctUntilChanged((previous, current) => {
             if (previous.length !== current.length) {
               return false;
             }
