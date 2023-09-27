@@ -1,0 +1,12 @@
+{
+  "entries": [
+    "components/async/async.js"
+  ],
+  "compiler": {
+    "name": "@stencil/core",
+    "version": "4.3.0",
+    "typescriptVersion": "5.1.6"
+  },
+  "collections": [],
+  "bundles": []
+}

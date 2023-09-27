@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../src/rx/decorator/index.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,aAAa,EAAE,MAAS,kBAAkB,CAAC;AACpD,OAAO,EAAE,gBAAgB,EAAE,MAAM,sBAAsB,CAAC","sourcesContent":["export { QuerySelector }    from './query-selector';\nexport { QuerySelectorAll } from './query-selector-all';\n"]}

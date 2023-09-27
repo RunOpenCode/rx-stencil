@@ -5,57 +5,37 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { AsyncValue } from "./components/async/async";
+export { AsyncValue } from "./components/async/async";
 export namespace Components {
-    interface MyComponent {
-        /**
-          * The first name
-         */
-        "first": string;
-        /**
-          * The last name
-         */
-        "last": string;
-        /**
-          * The middle name
-         */
-        "middle": string;
+    interface RxAsync {
+        "value": AsyncValue;
     }
 }
 declare global {
-    interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
+    interface HTMLRxAsyncElement extends Components.RxAsync, HTMLStencilElement {
     }
-    var HTMLMyComponentElement: {
-        prototype: HTMLMyComponentElement;
-        new (): HTMLMyComponentElement;
+    var HTMLRxAsyncElement: {
+        prototype: HTMLRxAsyncElement;
+        new (): HTMLRxAsyncElement;
     };
     interface HTMLElementTagNameMap {
-        "my-component": HTMLMyComponentElement;
+        "rx-async": HTMLRxAsyncElement;
     }
 }
 declare namespace LocalJSX {
-    interface MyComponent {
-        /**
-          * The first name
-         */
-        "first"?: string;
-        /**
-          * The last name
-         */
-        "last"?: string;
-        /**
-          * The middle name
-         */
-        "middle"?: string;
+    interface RxAsync {
+        "value"?: AsyncValue;
     }
     interface IntrinsicElements {
-        "my-component": MyComponent;
+        "rx-async": RxAsync;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            "rx-async": LocalJSX.RxAsync & JSXBase.HTMLAttributes<HTMLRxAsyncElement>;
         }
     }
 }
