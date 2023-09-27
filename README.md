@@ -11,7 +11,8 @@ with requirements such as debouncing, throttling, retrying, etc.
 > components for server-side rendered applications. In conjunction with 
 > [@runopencode/http](https://github.com/RunOpenCode/http) Stencil can be used to communicate with RESTful APIs through
 > RxJS and observables, instead of using imperative approach with Promises. This allows you to write very
-> complex, glitch-free, components.
+> complex, glitch-free, components. Of course, you can use this library with any other HTTP client, or fetch API, 
+> wrapped by RxJS observables using function "[fromFetch()](https://rxjs.dev/api/fetch/fromFetch)".
 
 ## Table of contents
 
@@ -19,4 +20,8 @@ with requirements such as debouncing, throttling, retrying, etc.
     - [rx-async](docs/components.md#rx-async)
 - Decorators
     - [@QuerySelector()](docs/query-selector-decorator.md)
+    - [@QuerySelectorAll()](docs/query-selector-all-decorator.md)
 
+## TODO
+
+- [ ] Add moar tests.

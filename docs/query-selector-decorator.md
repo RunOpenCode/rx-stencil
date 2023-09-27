@@ -1,7 +1,7 @@
 # @QuerySelector()
 
 `@QuerySelector()` is a property decorator which can be used to query for a specific element in the component's
-template. It is inspired by the `@ViewChild()` and `@ContentChild()` decorator in Angular. It accepts a CSS selector as
+template. It is inspired by the `@ViewChild()` and `@ContentChild()` decorators in Angular. It accepts a CSS selector as
 an argument which will be used to query for the element. This is alternative approach to the getting reference to a DOM
 element in the component (see: https://stenciljs.com/docs/templating-jsx#getting-a-reference-to-a-dom-element for more
 details). Using this decorator, you are able to apply declarative style of programming when working with DOM elements.
@@ -10,9 +10,18 @@ details). Using this decorator, you are able to apply declarative style of progr
 
 - `selector`, string, required - CSS selector which will be used to query for the element. It can be any valid CSS
   selector. Search will start from the component element, or shadow root if component is using shadow DOM and parameter
-  `shadowRoot` is set to `true`.
-- `shadowRoot`, boolean, optional, default `false`: if set to `true`, search will start from the component's shadow
-  root. If component does not use shadow DOM, exception will be thrown.
+  `options.shadowRoot` is set to `true`.
+- `options`, `QuerySelectorOptions`, optional, default `undefined` which means that default options will be used. This
+  is an object with following properties:
+    - `shadowRoot`, boolean, optional, default `false` - if set to `true`, search will start from shadow root of the
+      component, instead of the component element itself. If component does not use shadow DOM, exception will be
+      thrown.
+    - `mutationObserver`, boolean, optional, default `false` - if set to `true`, decorator will use MutationObserver to
+      observe changes in the DOM subtree of the component. This is more reliable approach, but it is also more
+      expensive. It should be used when you are querying for element which is projected into the component through
+      `<slot>` element, or if subtree of the component is changed by some other means, not via Stencil's reactivity. By
+      default, decorator will monitor execution of the `render()` function of the component and will query for the
+      element after each execution.
 
 `@QuerySelector()` decorator must be used on any property of the component, and type of the property is `Observable`
 from `rxjs` library. Observable will be used to emit reference to queried element, or `null` if element does not exist.
@@ -25,11 +34,11 @@ class MyCmp {
 }
 ```
 
-After each execution of the `render()` function of the component, decorator will query for the element and emit its
-reference, if it can be found, or `null`. This value will be emitted only if it is different from the previous one and
-on next micro-task (i.e. after `Promise.resolve()`). 
+After each execution of the `render()` function of the component (or mutation of DOM subtree), decorator will query for 
+the element and emit its reference, if it can be found, or `null`. This value will be emitted only if it is different 
+from the previous one and on next micro-task (i.e. after `Promise.resolve()`).
 
-A fair warning: in theory, you are able to create infinite loop without noticing because value is emitted on next 
+A fair warning: in theory, you are able to create infinite loop without noticing because value is emitted on next
 micro-task, main browser thread will not be blocked.
 
 ## Example

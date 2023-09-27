@@ -10,6 +10,22 @@ import {
     startWith,
 }                           from 'rxjs';
 import { renderObservable } from '../observable';
+import { observeSubNodes }  from './query-selector';
+
+/**
+ * Options for QuerySelectorAll decorator.
+ */
+export type QuerySelectorAllOptions = {
+    /**
+     * If `true`, the elements will be searched in the shadow root. Default is `false`.
+     */
+    shadowRoot?: boolean;
+    /**
+     * If `true`, mutation observer instead of `renderObservable` from this package will
+     * be used to detect changes. Default is `false`.
+     */
+    mutationObserver?: boolean;
+};
 
 /**
  * Property decorator inspired by Angular's @ViewChild/@ContentChild.
@@ -18,23 +34,20 @@ import { renderObservable } from '../observable';
  * matching the given selector. If no element is found, the property will be
  * set to null.
  */
-export function QuerySelectorAll<T extends HTMLElement = HTMLElement>(selector: string, shadowRoot: boolean = false): any {
+export function QuerySelectorAll<T extends HTMLElement = HTMLElement>(selector: string, options?: QuerySelectorAllOptions): any {
     return (target: Function, property: string): void => {
         let descriptor: PropertyDescriptor = {
             set: function (): void {
                 throw new Error(`Property "${property}" is read-only.`);
             },
             get: function (this: ComponentInterface): Observable<T | null> {
-                let observableProperty: string = `__rx__query_selector_all__observable__shadow_root__${shadowRoot ? 'yes' : 'no'}__selector__${selector}__`;
+                let observableProperty: string = `__rx__query_selector_all__observable__shadow_root__${options?.shadowRoot ? 'yes' : 'no'}__mutation_observer__${options?.mutationObserver ? 'yes' : 'no'}__selector__${selector}__`;
 
                 if (!this[observableProperty]) {
-                    let root: HTMLElement | ShadowRoot = getElement(this);
+                    let root: HTMLElement | ShadowRoot = options?.shadowRoot ? getElement(this).shadowRoot : getElement(this);
+                    let observable: Observable<void>   = options?.mutationObserver ? observeSubNodes(root) : renderObservable(this);
 
-                    if (shadowRoot) {
-                        root = root.shadowRoot;
-                    }
-
-                    this[observableProperty] = renderObservable(this).pipe(
+                    this[observableProperty] = observable.pipe(
                         startWith(),
                         map((): T[] => Array.from(root.querySelectorAll(selector))),
                         distinctUntilChanged((previous: T[], current: T[]): boolean => {
