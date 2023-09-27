@@ -1,6 +1,6 @@
 # Components
 
-## <rx-async>
+## rx-async
 
 `rx-async` is a simple component which accepts an observable as a property and renders the result of the observable. It
 is similar to the `async` pipe in Angular. It is useful when you want to render the result of an observable in a

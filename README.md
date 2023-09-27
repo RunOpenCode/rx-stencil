@@ -15,7 +15,7 @@ problems related to executing HTTP request, with requirements such as debouncing
 ## Table of contents
 
 - [Components](docs/components.md)
-  - [<rx-async>](docs/components.md#rx-async)
+  - [rx-async](docs/components.md#rx-async)
 - Decorators
   - [@QuerySelector()](docs/query-selector-decorator.md)
 
