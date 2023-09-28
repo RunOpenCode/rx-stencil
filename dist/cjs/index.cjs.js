@@ -146,6 +146,13 @@ function concat(...args) {
     return concatAll()(setProperty.from(args, setProperty.popScheduler(args)));
 }
 
+function filter(predicate, thisArg) {
+    return setProperty.operate((source, subscriber) => {
+        let index = 0;
+        source.subscribe(setProperty.createOperatorSubscriber(subscriber, (value) => predicate.call(thisArg, value, index++) && subscriber.next(value)));
+    });
+}
+
 function share(options = {}) {
     const { connector = () => new setProperty.Subject(), resetOnError = true, resetOnComplete = true, resetOnRefCountZero = true } = options;
     return (wrapperSource) => {
@@ -288,6 +295,18 @@ function tap(observerOrNext, error, complete) {
             setProperty.identity;
 }
 
+function mutationObservable(target, options) {
+  return new setProperty.Observable((observer) => {
+    let mutation = new MutationObserver((mutations) => {
+      observer.next(mutations);
+    });
+    mutation.observe(target, options);
+    return () => {
+      mutation.disconnect();
+    };
+  });
+}
+
 /**
  * Returns an observable that emits when the component render()
  * function is called. Value will be emitted after the next
@@ -312,26 +331,48 @@ function renderObservable(cmp) {
 }
 
 /**
+ * Observe all sub nodes of the given node and notify
+ * when any of them is removed and/or added.
+ *
+ * {@internal}
+ */
+function observeSubNodes(target) {
+  return mutationObservable(target, {
+    subtree: true,
+    childList: true,
+  }).pipe(filter((records) => {
+    for (let i = 0; i < records.length; i++) {
+      if ('childList' !== records[i].type) {
+        continue;
+      }
+      if (records[i].addedNodes.length || records[i].removedNodes.length) {
+        return true;
+      }
+    }
+    return false;
+  }), map(() => {
+    /* noop */
+  }));
+}
+/**
  * Property decorator inspired by Angular's @ViewChild/@ContentChild.
  *
  * After each render, the decorated property will be set to the first element
  * matching the given selector. If no element is found, the property will be
  * set to null.
  */
-function QuerySelector(selector, shadowRoot = false) {
+function QuerySelector(selector, options) {
   return (target, property) => {
     let descriptor = {
       set: function () {
         throw new Error(`Property "${property}" is read-only.`);
       },
       get: function () {
-        let observableProperty = `__rx__query_selector__observable__shadow_root__${shadowRoot ? 'yes' : 'no'}__selector__${selector}__`;
+        let observableProperty = `__rx__query_selector__observable__shadow_root__${(options === null || options === void 0 ? void 0 : options.shadowRoot) ? 'yes' : 'no'}__mutation_observer__${(options === null || options === void 0 ? void 0 : options.mutationObserver) ? 'yes' : 'no'}__selector__${selector}__`;
         if (!this[observableProperty]) {
-          let root = index.getElement(this);
-          if (shadowRoot) {
-            root = root.shadowRoot;
-          }
-          this[observableProperty] = renderObservable(this).pipe(startWith(), map(() => root.querySelector(selector)), setProperty.distinctUntilChanged(), shareReplay(1));
+          let root = (options === null || options === void 0 ? void 0 : options.shadowRoot) ? index.getElement(this).shadowRoot : index.getElement(this);
+          let observable = (options === null || options === void 0 ? void 0 : options.mutationObserver) ? observeSubNodes(root) : renderObservable(this);
+          this[observableProperty] = observable.pipe(startWith(), map(() => root.querySelector(selector)), setProperty.distinctUntilChanged(), shareReplay(1));
         }
         return this[observableProperty];
       },
@@ -347,20 +388,18 @@ function QuerySelector(selector, shadowRoot = false) {
  * matching the given selector. If no element is found, the property will be
  * set to null.
  */
-function QuerySelectorAll(selector, shadowRoot = false) {
+function QuerySelectorAll(selector, options) {
   return (target, property) => {
     let descriptor = {
       set: function () {
         throw new Error(`Property "${property}" is read-only.`);
       },
       get: function () {
-        let observableProperty = `__rx__query_selector_all__observable__shadow_root__${shadowRoot ? 'yes' : 'no'}__selector__${selector}__`;
+        let observableProperty = `__rx__query_selector_all__observable__shadow_root__${(options === null || options === void 0 ? void 0 : options.shadowRoot) ? 'yes' : 'no'}__mutation_observer__${(options === null || options === void 0 ? void 0 : options.mutationObserver) ? 'yes' : 'no'}__selector__${selector}__`;
         if (!this[observableProperty]) {
-          let root = index.getElement(this);
-          if (shadowRoot) {
-            root = root.shadowRoot;
-          }
-          this[observableProperty] = renderObservable(this).pipe(startWith(), map(() => Array.from(root.querySelectorAll(selector))), setProperty.distinctUntilChanged((previous, current) => {
+          let root = (options === null || options === void 0 ? void 0 : options.shadowRoot) ? index.getElement(this).shadowRoot : index.getElement(this);
+          let observable = (options === null || options === void 0 ? void 0 : options.mutationObserver) ? observeSubNodes(root) : renderObservable(this);
+          this[observableProperty] = observable.pipe(startWith(), map(() => Array.from(root.querySelectorAll(selector))), setProperty.distinctUntilChanged((previous, current) => {
             if (previous.length !== current.length) {
               return false;
             }
@@ -524,6 +563,7 @@ exports.propertyObservable = setProperty.propertyObservable;
 exports.setProperty = setProperty.setProperty;
 exports.QuerySelector = QuerySelector;
 exports.QuerySelectorAll = QuerySelectorAll;
+exports.mutationObservable = mutationObservable;
 exports.renderObservable = renderObservable;
 exports.scheduleRender = scheduleRender;
 exports.toProperty = toProperty;
