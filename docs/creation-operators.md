@@ -33,9 +33,20 @@ There are many use cases where this operator can be used, however, a simple exam
 computed property is given in example below:
 
 ```typescript jsx
-import { Component, ComponentInterface, Prop } from '@stencil/core';
-import { combineLatest, map } from 'rxjs';
-import { propertyObservable, untilDisconnected, scheduleRender } from '@runopencode/rx-stencil';
+import {
+    Component,
+    ComponentInterface,
+    Prop,
+} from '@stencil/core';
+import {
+    combineLatest,
+    map,
+} from 'rxjs';
+import {
+    propertyObservable,
+    untilDisconnected,
+    scheduleRender,
+} from '@runopencode/rx-stencil';
 
 @Component({
     tag: 'my-component',
@@ -55,6 +66,54 @@ class MyComponent implements ComponentInterface {
             propertyObservable(this, 'first'),
             propertyObservable(this, 'second'),
         ]).pipe(
+            untilDisconnected(this),
+            map(([first, second]) => first + second),
+            scheduleRender(this),
+        ).subscribe(sum => this.sum = sum);
+    }
+
+    public render(): any {
+        return <div>{this.sum}</div>;
+    }
+}
+```
+
+## propertiesObservable()
+
+Similar to `propertyObservable()`, with exception that you are able to observe changes of multiple properties at once.
+
+Function signature is: `propertiesObservable<T extends any[]>(cmp: ComponentInterface, ...properties: string[]): Observable<T>`
+
+Obvious use case is to observe changes of multiple properties at once and set the value of computed one.
+
+```typescript jsx
+import {
+    Component,
+    ComponentInterface,
+    Prop,
+} from '@stencil/core';
+import { map } from 'rxjs';
+import {
+    propertiesObservable,
+    scheduleRender,
+    untilDisconnected
+} from '@runopencode/rx-stencil';
+
+@Component({
+    tag: 'my-component',
+})
+class MyComponent implements ComponentInterface {
+
+    @Prop()
+    public first: number = 0;
+
+    @Prop()
+    public second: number = 0;
+
+    private sum: number = 0;
+
+    public connectedCallback(): void {
+        propertiesObservable(this, 'first', 'second').pipe(
             untilDisconnected(this),
             map(([first, second]) => first + second),
             scheduleRender(this),

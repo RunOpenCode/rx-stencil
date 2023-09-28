@@ -1,1 +1,0 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../src/rx/subscriber/index.ts"],"names":[],"mappings":"AAAA,OAAO,EAEH,WAAW,GACd,MAAM,gBAAgB,CAAC","sourcesContent":["export {\n    SetPropertyOptions,\n    setProperty,\n} from './set-property';\n"]}
