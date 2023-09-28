@@ -1,5 +1,7 @@
 # @runopencode/rx-stencil
 
+[![npm version](https://badge.fury.io/js/@runopencode%2Frx-stencil.svg)](https://badge.fury.io/js/@runopencode%2Frx-stencil)
+
 This is a small utility library which provides a set of useful functions for working
 with [Stencil](https://stenciljs.com) components in conjunction with [RxJS](https://rxjs.dev). RxJS is not, in general,
 well integrated with Stencil, nor core concepts of Stencil in regard to reactivity. However, certain problems can be

@@ -1,7 +1,12 @@
 {
     "name": "@runopencode/rx-stencil",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "description": "ReactiveX (RxJS) utilities for Stencil",
+    "keywords": [
+        "stencil",
+        "stenciljs",
+        "rxjs"
+    ],
     "main": "dist/index.cjs.js",
     "module": "dist/index.js",
     "es2015": "dist/esm/index.mjs",
@@ -16,7 +21,8 @@
     },
     "files": [
         "dist/",
-        "loader/"
+        "loader/",
+        "docs/"
     ],
     "scripts": {
         "build": "stencil build --docs",
