@@ -9,6 +9,9 @@ import { AsyncValue } from "./components/async/async";
 export { AsyncValue } from "./components/async/async";
 export namespace Components {
     interface RxAsync {
+        /**
+          * @default null
+         */
         "value": AsyncValue;
     }
 }
@@ -25,6 +28,9 @@ declare global {
 }
 declare namespace LocalJSX {
     interface RxAsync {
+        /**
+          * @default null
+         */
         "value"?: AsyncValue;
     }
     interface IntrinsicElements {
@@ -35,7 +41,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "rx-async": LocalJSX.RxAsync & JSXBase.HTMLAttributes<HTMLRxAsyncElement>;
+            "rx-async": LocalJSX.IntrinsicElements["rx-async"] & JSXBase.HTMLAttributes<HTMLRxAsyncElement>;
         }
     }
 }

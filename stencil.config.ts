@@ -1,7 +1,11 @@
 import { Config } from '@stencil/core';
+import { sass }   from '@stencil/sass';
 
 export const config: Config = {
     namespace:     'rx-stencil',
+    plugins:       [
+        sass(),
+    ],
     outputTargets: [
         {
             type:          'dist',
