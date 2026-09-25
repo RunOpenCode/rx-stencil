@@ -1,6 +1,6 @@
 {
     "name": "@runopencode/rx-stencil",
-    "version": "0.4.4",
+    "version": "0.5.0",
     "description": "ReactiveX (RxJS) utilities for Stencil",
     "keywords": [
         "stencil",
