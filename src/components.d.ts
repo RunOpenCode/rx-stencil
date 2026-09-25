@@ -5,14 +5,41 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { AsyncValue } from "./components/async/async";
-export { AsyncValue } from "./components/async/async";
+import { AsyncValue, ValueTransformFn } from "./components/async/async";
+export { AsyncValue, ValueTransformFn } from "./components/async/async";
 export namespace Components {
     interface RxAsync {
+        /**
+          * @default (value: unknown | null | undefined): any => value
+         */
+        "transform": ValueTransformFn;
         /**
           * @default null
          */
         "value": AsyncValue;
+    }
+    interface TestFromEvent {
+    }
+    interface TestPropertiesObservable {
+        "bar": string;
+        "baz": string;
+        "foo": string;
+    }
+    interface TestPropertyObservable {
+        "setValue": (value: string) => Promise<void>;
+    }
+    interface TestScheduleRender {
+        "increase": () => Promise<void>;
+    }
+    interface TestViewChildObservableShadowDom {
+        "clearLog": () => Promise<void>;
+        "getLog": () => Promise<string[]>;
+        /**
+          * @default 'all'
+         */
+        "which": 'even' | 'odd' | 'all';
+    }
+    interface TestWhileConnected {
     }
 }
 declare global {
@@ -22,19 +49,102 @@ declare global {
         prototype: HTMLRxAsyncElement;
         new (): HTMLRxAsyncElement;
     };
+    interface HTMLTestFromEventElement extends Components.TestFromEvent, HTMLStencilElement {
+    }
+    var HTMLTestFromEventElement: {
+        prototype: HTMLTestFromEventElement;
+        new (): HTMLTestFromEventElement;
+    };
+    interface HTMLTestPropertiesObservableElement extends Components.TestPropertiesObservable, HTMLStencilElement {
+    }
+    var HTMLTestPropertiesObservableElement: {
+        prototype: HTMLTestPropertiesObservableElement;
+        new (): HTMLTestPropertiesObservableElement;
+    };
+    interface HTMLTestPropertyObservableElement extends Components.TestPropertyObservable, HTMLStencilElement {
+    }
+    var HTMLTestPropertyObservableElement: {
+        prototype: HTMLTestPropertyObservableElement;
+        new (): HTMLTestPropertyObservableElement;
+    };
+    interface HTMLTestScheduleRenderElement extends Components.TestScheduleRender, HTMLStencilElement {
+    }
+    var HTMLTestScheduleRenderElement: {
+        prototype: HTMLTestScheduleRenderElement;
+        new (): HTMLTestScheduleRenderElement;
+    };
+    interface HTMLTestViewChildObservableShadowDomElement extends Components.TestViewChildObservableShadowDom, HTMLStencilElement {
+    }
+    var HTMLTestViewChildObservableShadowDomElement: {
+        prototype: HTMLTestViewChildObservableShadowDomElement;
+        new (): HTMLTestViewChildObservableShadowDomElement;
+    };
+    interface HTMLTestWhileConnectedElement extends Components.TestWhileConnected, HTMLStencilElement {
+    }
+    var HTMLTestWhileConnectedElement: {
+        prototype: HTMLTestWhileConnectedElement;
+        new (): HTMLTestWhileConnectedElement;
+    };
     interface HTMLElementTagNameMap {
         "rx-async": HTMLRxAsyncElement;
+        "test-from-event": HTMLTestFromEventElement;
+        "test-properties-observable": HTMLTestPropertiesObservableElement;
+        "test-property-observable": HTMLTestPropertyObservableElement;
+        "test-schedule-render": HTMLTestScheduleRenderElement;
+        "test-view-child-observable-shadow-dom": HTMLTestViewChildObservableShadowDomElement;
+        "test-while-connected": HTMLTestWhileConnectedElement;
     }
 }
 declare namespace LocalJSX {
+    type OneOf<K extends string, PropT, AttrT = PropT> = { [P in K]: PropT } & { [P in `attr:${K}`]?: never } | { [P in `attr:${K}`]: AttrT } & { [P in K]?: never };
+
     interface RxAsync {
+        /**
+          * @default (value: unknown | null | undefined): any => value
+         */
+        "transform"?: ValueTransformFn;
         /**
           * @default null
          */
         "value"?: AsyncValue;
     }
+    interface TestFromEvent {
+    }
+    interface TestPropertiesObservable {
+        "bar": string;
+        "baz": string;
+        "foo": string;
+    }
+    interface TestPropertyObservable {
+    }
+    interface TestScheduleRender {
+    }
+    interface TestViewChildObservableShadowDom {
+        /**
+          * @default 'all'
+         */
+        "which"?: 'even' | 'odd' | 'all';
+    }
+    interface TestWhileConnected {
+    }
+
+    interface TestPropertiesObservableAttributes {
+        "foo": string;
+        "bar": string;
+        "baz": string;
+    }
+    interface TestViewChildObservableShadowDomAttributes {
+        "which": 'even' | 'odd' | 'all';
+    }
+
     interface IntrinsicElements {
         "rx-async": RxAsync;
+        "test-from-event": TestFromEvent;
+        "test-properties-observable": Omit<TestPropertiesObservable, keyof TestPropertiesObservableAttributes> & { [K in keyof TestPropertiesObservable & keyof TestPropertiesObservableAttributes]?: TestPropertiesObservable[K] } & { [K in keyof TestPropertiesObservable & keyof TestPropertiesObservableAttributes as `attr:${K}`]?: TestPropertiesObservableAttributes[K] } & { [K in keyof TestPropertiesObservable & keyof TestPropertiesObservableAttributes as `prop:${K}`]?: TestPropertiesObservable[K] } & OneOf<"foo", TestPropertiesObservable["foo"], TestPropertiesObservableAttributes["foo"]> & OneOf<"bar", TestPropertiesObservable["bar"], TestPropertiesObservableAttributes["bar"]> & OneOf<"baz", TestPropertiesObservable["baz"], TestPropertiesObservableAttributes["baz"]>;
+        "test-property-observable": TestPropertyObservable;
+        "test-schedule-render": TestScheduleRender;
+        "test-view-child-observable-shadow-dom": Omit<TestViewChildObservableShadowDom, keyof TestViewChildObservableShadowDomAttributes> & { [K in keyof TestViewChildObservableShadowDom & keyof TestViewChildObservableShadowDomAttributes]?: TestViewChildObservableShadowDom[K] } & { [K in keyof TestViewChildObservableShadowDom & keyof TestViewChildObservableShadowDomAttributes as `attr:${K}`]?: TestViewChildObservableShadowDomAttributes[K] } & { [K in keyof TestViewChildObservableShadowDom & keyof TestViewChildObservableShadowDomAttributes as `prop:${K}`]?: TestViewChildObservableShadowDom[K] };
+        "test-while-connected": TestWhileConnected;
     }
 }
 export { LocalJSX as JSX };
@@ -42,6 +152,12 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "rx-async": LocalJSX.IntrinsicElements["rx-async"] & JSXBase.HTMLAttributes<HTMLRxAsyncElement>;
+            "test-from-event": LocalJSX.IntrinsicElements["test-from-event"] & JSXBase.HTMLAttributes<HTMLTestFromEventElement>;
+            "test-properties-observable": LocalJSX.IntrinsicElements["test-properties-observable"] & JSXBase.HTMLAttributes<HTMLTestPropertiesObservableElement>;
+            "test-property-observable": LocalJSX.IntrinsicElements["test-property-observable"] & JSXBase.HTMLAttributes<HTMLTestPropertyObservableElement>;
+            "test-schedule-render": LocalJSX.IntrinsicElements["test-schedule-render"] & JSXBase.HTMLAttributes<HTMLTestScheduleRenderElement>;
+            "test-view-child-observable-shadow-dom": LocalJSX.IntrinsicElements["test-view-child-observable-shadow-dom"] & JSXBase.HTMLAttributes<HTMLTestViewChildObservableShadowDomElement>;
+            "test-while-connected": LocalJSX.IntrinsicElements["test-while-connected"] & JSXBase.HTMLAttributes<HTMLTestWhileConnectedElement>;
         }
     }
 }

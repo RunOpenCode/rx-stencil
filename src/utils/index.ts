@@ -1,1 +1,4 @@
-export { getPropertyDescriptor } from './get-property-descriptor';
+export {
+    getHostRef,
+    isPropOrState,
+} from './stencil';

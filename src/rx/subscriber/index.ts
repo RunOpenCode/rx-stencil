@@ -1,4 +1,1 @@
-export {
-    SetPropertyOptions,
-    setProperty,
-} from './set-property';
+export * from './set-property';

@@ -4,6 +4,7 @@ import {
     h,
     Host,
     Prop,
+    State,
 } from '@stencil/core';
 import {
     from,
@@ -15,9 +16,12 @@ import {
 import {
     propertyObservable,
     setProperty,
+    untilDisconnected,
 } from '../../rx';
 
-export type AsyncValue = Promise<unknown> | Observable<unknown> | null | undefined;
+export type AsyncValue<T = unknown> = Promise<T> | Observable<T> | null | undefined;
+
+export type ValueTransformFn<T = unknown, R = unknown> = (value: T | null | undefined) => R;
 
 @Component({
     tag:      'rx-async',
@@ -29,35 +33,40 @@ export class Async implements ComponentInterface {
     @Prop()
     public value: AsyncValue = null;
 
-    private _value: unknown = null;
+    @Prop()
+    public transform: ValueTransformFn = (value: unknown | null | undefined): any => value;
 
+    @State()
+    private _value: unknown | null | undefined = null;
+
+    /**
+     * {@inheritdoc}
+     */
     public connectedCallback(): void {
-        propertyObservable(this, 'value').pipe(
-            switchMap((value: AsyncValue): Observable<unknown> => {
-                if (isObservable(value)) {
-                    return value;
-                }
+        propertyObservable(this, 'value')
+            .pipe(switchMap((value: AsyncValue): Observable<unknown> => {
+                    if (isObservable(value)) {
+                        return value;
+                    }
 
-                if (value instanceof Promise) {
-                    return from(value);
-                }
+                    if (value instanceof Promise) {
+                        return from(value);
+                    }
 
-                return of(value);
-            }),
-        ).subscribe(setProperty(this, '_value', {
-            scheduleRender: true,
-            nextTick:       false,
-        }));
+                    return of(value);
+                }),
+                untilDisconnected(this),
+            )
+            .subscribe(setProperty(this, '_value'));
     }
 
-    public disconnectedCallback(): void {
-        // noop
-    }
-
+    /**
+     * {@inheritdoc}
+     */
     public render(): any {
         return (
             <Host>
-                {this._value}
+                {this.transform(this._value)}
             </Host>
         )
     }

@@ -1,3 +1,4 @@
-export { scheduleRender }    from './schedule-render';
-export { toProperty }        from './to-property';
-export { untilDisconnected } from './until-disconnected';
+export * from './schedule-render';
+export * from './to-property';
+export * from './until-disconnected';
+export * from './while-connected';

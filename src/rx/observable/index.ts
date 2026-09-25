@@ -1,4 +1,9 @@
-export { mutationObservable }   from './mutation-observable';
-export { propertyObservable }   from './property-observable';
-export { propertiesObservable } from './properties-observable';
-export { renderObservable }     from './render-observable';
+export * from './content-child-observable';
+export * from './content-children-observable';
+export * from './from-event';
+export * from './mutation-observable';
+export * from './properties-observable';
+export * from './property-observable';
+export * from './render-observable';
+export * from './view-child-observable';
+export * from './view-children-observable';

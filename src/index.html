@@ -7,7 +7,27 @@
 
         <script type="module" src="/build/rx-stencil.esm.js"></script>
         <script nomodule src="/build/rx-stencil.js"></script>
+        
+        <script type="text/javascript">
+            function doUpdate() {
+                
+                // foo
+                document.querySelector('rx-async').value = Promise.resolve(Math.random());
+            }
+        </script>
     </head>
+    
+    
     <body>
+        <rx-async></rx-async>
+        <button onclick="doUpdate()">Run</button>
+        
+        <test-observe-multiple-props
+            foo="foo"
+            bar="bar"
+            baz="baz"
+        >
+            
+        </test-observe-multiple-props>
     </body>
 </html>

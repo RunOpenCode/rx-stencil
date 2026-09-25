@@ -2,11 +2,11 @@ import { Config } from '@stencil/core';
 import { sass }   from '@stencil/sass';
 
 export const config: Config = {
-    namespace:     'rx-stencil',
-    plugins:       [
+    namespace:         'rx-stencil',
+    plugins:           [
         sass(),
     ],
-    outputTargets: [
+    outputTargets:     [
         {
             type:          'dist',
             esmLoaderPath: '../loader',
@@ -22,7 +22,11 @@ export const config: Config = {
             serviceWorker: null, // disable service workers
         },
     ],
-    testing:       {
-        browserHeadless: 'new',
-    },
+    excludeComponents: [
+        'test-from-event',
+        'test-observe-multiple-props',
+        'test-observe-props',
+        'test-while-connected',
+    ],
+    buildDist:         true,
 };

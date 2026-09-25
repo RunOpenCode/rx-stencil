@@ -7,9 +7,10 @@
 
 ## Properties
 
-| Property | Attribute | Description | Type                                      | Default |
-| -------- | --------- | ----------- | ----------------------------------------- | ------- |
-| `value`  | --        |             | `Observable<unknown> \| Promise<unknown>` | `null`  |
+| Property    | Attribute | Description | Type                                      | Default                                               |
+| ----------- | --------- | ----------- | ----------------------------------------- | ----------------------------------------------------- |
+| `transform` | --        |             | `unknown`                                 | `(value: unknown \| null \| undefined): any => value` |
+| `value`     | --        |             | `Observable<unknown> \| Promise<unknown>` | `null`                                                |
 
 
 ----------------------------------------------

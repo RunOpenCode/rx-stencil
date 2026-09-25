@@ -1,4 +1,5 @@
 .stencil/*
+coverage/*
 dist/*
 loader/*
 node_modules/
