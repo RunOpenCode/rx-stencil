@@ -5,21 +5,23 @@ import {
     Host,
     Prop,
     State,
-} from '@stencil/core';
+}                    from '@stencil/core';
 import {
     from,
     isObservable,
     Observable,
     of,
     switchMap,
+    tap,
 } from 'rxjs';
+import { isPromise } from 'rxjs/internal/util/isPromise';
 import {
     propertyObservable,
     setProperty,
     untilDisconnected,
-} from '../../rx';
+}                    from '../../rx';
 
-export type AsyncValue<T = unknown> = Promise<T> | Observable<T> | null | undefined;
+export type AsyncValue<T = unknown> = PromiseLike<T> | Observable<T> | T | null | undefined;
 
 export type ValueTransformFn<T = unknown, R = unknown> = (value: T | null | undefined) => R;
 
@@ -34,22 +36,22 @@ export class Async implements ComponentInterface {
     public value: AsyncValue = null;
 
     @Prop()
-    public transform: ValueTransformFn = (value: unknown | null | undefined): any => value;
+    public transform: ValueTransformFn = (value: unknown | null | undefined): string => String(value ?? '').toString();
 
     @State()
-    private _value: unknown | null | undefined = null;
+    private _value: string | null | undefined = null;
 
     /**
      * {@inheritdoc}
      */
     public connectedCallback(): void {
         propertyObservable(this, 'value')
-            .pipe(switchMap((value: AsyncValue): Observable<unknown> => {
-                    if (isObservable(value)) {
-                        return value;
-                    }
-
-                    if (value instanceof Promise) {
+            .pipe(
+                tap((): void => {
+                    this._value = null;
+                }),
+                switchMap((value: AsyncValue): Observable<unknown> => {
+                    if (isPromise(value) || isObservable(value)) {
                         return from(value);
                     }
 
