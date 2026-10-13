@@ -12,7 +12,7 @@ import {
     beforeEach,
 } from '@stencil/vitest';
 
-import { mutationObservable } from '../../../rx';
+import { mutationObservable } from '../../../../rx';
 
 describe('mutationObservable()', (): void => {
 

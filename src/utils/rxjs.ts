@@ -65,10 +65,15 @@ export function distinctUntilElementsChanged<E extends Element = Element>(compar
  *
  * @internal
  */
-export function observeSubtree(element: HTMLElement): Observable<MutationRecord[]> {
+export function observeSubtree(element: HTMLElement, options?: {
+    attributes?: boolean;
+    attributeFilter?: string[]
+}): Observable<MutationRecord[]> {
     return mutationObservable(element, {
-        childList: true,
-        subtree:   true,
+        childList:       true,
+        subtree:         true,
+        attributes:      options?.attributes,
+        attributeFilter: options?.attributeFilter,
     }).pipe(
         filter((records: MutationRecord[]): boolean => {
             for (let i: number = 0; i < records.length; i++) {

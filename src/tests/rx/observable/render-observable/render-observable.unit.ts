@@ -6,9 +6,9 @@ import {
 }                             from '@stencil/vitest';
 import { Unsubscribable }     from 'rxjs';
 import { vi }                 from 'vitest';
-import { renderObservable }   from '../../../rx';
+import { renderObservable }   from '../../../../rx';
 
-vi.mock('../../../utils/stencil', () => ({
+vi.mock('../../../../utils/stencil', () => ({
     getComponentTagName: vi.fn((): string => 'foo'),
     isRendered:          vi.fn((): boolean => false),
 }));

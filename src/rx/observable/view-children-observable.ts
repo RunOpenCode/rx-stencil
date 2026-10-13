@@ -1,31 +1,29 @@
 import {
     ComponentInterface,
     getElement,
-}                                       from '@stencil/core';
+}                                     from '@stencil/core';
+import { HTMLStencilElement }         from '@stencil/core/internal';
 import {
-    HostRef,
-    HTMLStencilElement,
-}                                       from '@stencil/core/internal';
-import {
+    from,
     map,
     Observable,
     startWith,
-}                                       from 'rxjs';
+    switchMap,
+}                                     from 'rxjs';
 import {
     EmulatedSlotNode,
-    getHostRef,
     isEmulatedViewChild,
     usesShadowDom,
-}                                       from '../../utils/stencil';
-import { distinctUntilElementsChanged } from '../../utils/rxjs';
-import { renderObservable }             from './render-observable';
-import { ViewChildObservableOptions }   from './view-child-observable';
+    distinctUntilElementsChanged,
+    isRendered,
+}                                     from '../../utils';
+import { renderObservable }           from './render-observable';
+import { ViewChildObservableOptions } from './view-child-observable';
 
 export type ViewChildrenObservableOptions = ViewChildObservableOptions;
 
 export function viewChildrenObservable<E extends Element = Element>(cmp: ComponentInterface, selector: string, options?: ViewChildrenObservableOptions): Observable<E[]> {
     let element: HTMLStencilElement = getElement(cmp);
-    let hostRef: HostRef            = getHostRef(cmp);
     let rendered: Observable<void>  = renderObservable(cmp);
 
     options = {
@@ -33,7 +31,7 @@ export function viewChildrenObservable<E extends Element = Element>(cmp: Compone
         ...options,
     }
 
-    if ((hostRef.$renderCount$ || 0) > 0) {
+    if (isRendered(cmp)) {
         rendered = rendered.pipe(
             startWith(void 0),
         );
@@ -50,6 +48,7 @@ export function viewChildrenObservable<E extends Element = Element>(cmp: Compone
     // When shadow DOM is emulated, this is more expensive, we need to query light DOM and use elements
     // which matches the selector, and it is not a child of any emulated slot node.
     return rendered.pipe(
+        switchMap((): Observable<void> => from(Promise.resolve())),
         map((): E[] => Array.from(element.querySelectorAll(selector) as NodeListOf<EmulatedSlotNode<E>>)),
         map((candidates: E[]): E[] => candidates.filter((candidate: E): boolean => isEmulatedViewChild(candidate, element))),
         distinctUntilElementsChanged<E>(options.distinct),

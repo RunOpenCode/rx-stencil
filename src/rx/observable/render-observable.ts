@@ -11,7 +11,7 @@ import {
 import {
     getComponentTagName,
     isRendered,
-} from '../../utils/stencil';
+} from '../../utils';
 
 let observables: WeakMap<HTMLElement, Observable<void>> = new WeakMap();
 

@@ -23,6 +23,7 @@ export const config: Config = {
         },
     ],
     excludeComponents: [
+        'test-connected-observable',
         'test-from-event',
         'test-observe-multiple-props',
         'test-observe-props',

@@ -15,48 +15,29 @@ import { viewChildObservable } from '../../../../rx';
 export class TestViewChildObservableShadowDom implements ComponentInterface {
 
     @Prop()
-    public which: 'even' | 'odd' | 'all' = 'all';
+    public show: boolean = false;
 
-    private _log: string[] = [];
-
-    @Method()
-    public async getLog(): Promise<string[]> {
-        return this._log;
-    }
-
-    @Method()
-    public async clearLog(): Promise<void> {
-        this._log = [];
-    }
+    private _value: string | null = null;
 
     /**
      * {@inheritdoc}
      */
     public connectedCallback() {
         viewChildObservable<HTMLDivElement>(this, 'div')
-            .subscribe((el: HTMLDivElement | null): void => {
-                this._log.push(`viewChildObservable@connectedCallback: ${el?.id}`)
-            })
+            .subscribe((element: HTMLDivElement | null): void => {
+                this._value = element?.textContent ?? null;
+            });
+    }
+
+    @Method()
+    public async getValue(): Promise<string | null> {
+        return this._value;
     }
 
     public render(): void {
         return (
             <Host>
-                {
-                    this.which !== 'even'
-                        ? (<div id="test-1" class="odd all" key="test-1">1</div>)
-                        : null
-                }
-                {
-                    this.which !== 'odd'
-                        ? (<div id="test-2" class="even all" key="test-2">2</div>)
-                        : null
-                }
-                {
-                    this.which !== 'even'
-                        ? (<div id="test-3" class="odd all" key="test-3">3</div>)
-                        : null
-                }
+                {this.show ? (<div>foo</div>) : null}
                 <slot></slot>
             </Host>
         )

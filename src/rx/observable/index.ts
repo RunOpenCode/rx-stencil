@@ -1,3 +1,5 @@
+export * from './connected-observable';
+
 export * from './content-child-observable';
 export * from './content-children-observable';
 export * from './from-event';

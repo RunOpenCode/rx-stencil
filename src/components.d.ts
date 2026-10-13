@@ -18,6 +18,20 @@ export namespace Components {
          */
         "value": AsyncValue;
     }
+    interface TestConnectedObservable {
+    }
+    interface TestContentChildObservableEmulation {
+        "getValue": () => Promise<string | null>;
+    }
+    interface TestContentChildObservableShadowDom {
+        "getValue": () => Promise<string | null>;
+    }
+    interface TestContentChildrenObservableEmulation {
+        "getValue": () => Promise<string | null>;
+    }
+    interface TestContentChildrenObservableShadowDom {
+        "getValue": () => Promise<string | null>;
+    }
     interface TestFromEvent {
     }
     interface TestPropertiesObservable {
@@ -26,18 +40,50 @@ export namespace Components {
         "foo": string;
     }
     interface TestPropertyObservable {
-        "setValue": (value: string) => Promise<void>;
+        /**
+          * @default null
+         */
+        "property": string | null;
+        "setValue": (value: Value) => Promise<void>;
     }
     interface TestScheduleRender {
         "increase": () => Promise<void>;
     }
-    interface TestViewChildObservableShadowDom {
-        "clearLog": () => Promise<void>;
-        "getLog": () => Promise<string[]>;
+    interface TestViewChildObservableEmulation {
+        "getValue": () => Promise<string | null>;
         /**
-          * @default 'all'
+          * @default false
          */
-        "which": 'even' | 'odd' | 'all';
+        "show": boolean;
+    }
+    interface TestViewChildObservableShadowDom {
+        "getValue": () => Promise<string | null>;
+        /**
+          * @default false
+         */
+        "show": boolean;
+    }
+    interface TestViewChildrenObservableEmulation {
+        "getValue": () => Promise<string | null>;
+        /**
+          * @default ''
+         */
+        "pref": string;
+        /**
+          * @default false
+         */
+        "show": boolean;
+    }
+    interface TestViewChildrenObservableShadowDom {
+        "getValue": () => Promise<string | null>;
+        /**
+          * @default ''
+         */
+        "pref": string;
+        /**
+          * @default false
+         */
+        "show": boolean;
     }
     interface TestWhileConnected {
     }
@@ -48,6 +94,36 @@ declare global {
     var HTMLRxAsyncElement: {
         prototype: HTMLRxAsyncElement;
         new (): HTMLRxAsyncElement;
+    };
+    interface HTMLTestConnectedObservableElement extends Components.TestConnectedObservable, HTMLStencilElement {
+    }
+    var HTMLTestConnectedObservableElement: {
+        prototype: HTMLTestConnectedObservableElement;
+        new (): HTMLTestConnectedObservableElement;
+    };
+    interface HTMLTestContentChildObservableEmulationElement extends Components.TestContentChildObservableEmulation, HTMLStencilElement {
+    }
+    var HTMLTestContentChildObservableEmulationElement: {
+        prototype: HTMLTestContentChildObservableEmulationElement;
+        new (): HTMLTestContentChildObservableEmulationElement;
+    };
+    interface HTMLTestContentChildObservableShadowDomElement extends Components.TestContentChildObservableShadowDom, HTMLStencilElement {
+    }
+    var HTMLTestContentChildObservableShadowDomElement: {
+        prototype: HTMLTestContentChildObservableShadowDomElement;
+        new (): HTMLTestContentChildObservableShadowDomElement;
+    };
+    interface HTMLTestContentChildrenObservableEmulationElement extends Components.TestContentChildrenObservableEmulation, HTMLStencilElement {
+    }
+    var HTMLTestContentChildrenObservableEmulationElement: {
+        prototype: HTMLTestContentChildrenObservableEmulationElement;
+        new (): HTMLTestContentChildrenObservableEmulationElement;
+    };
+    interface HTMLTestContentChildrenObservableShadowDomElement extends Components.TestContentChildrenObservableShadowDom, HTMLStencilElement {
+    }
+    var HTMLTestContentChildrenObservableShadowDomElement: {
+        prototype: HTMLTestContentChildrenObservableShadowDomElement;
+        new (): HTMLTestContentChildrenObservableShadowDomElement;
     };
     interface HTMLTestFromEventElement extends Components.TestFromEvent, HTMLStencilElement {
     }
@@ -73,11 +149,29 @@ declare global {
         prototype: HTMLTestScheduleRenderElement;
         new (): HTMLTestScheduleRenderElement;
     };
+    interface HTMLTestViewChildObservableEmulationElement extends Components.TestViewChildObservableEmulation, HTMLStencilElement {
+    }
+    var HTMLTestViewChildObservableEmulationElement: {
+        prototype: HTMLTestViewChildObservableEmulationElement;
+        new (): HTMLTestViewChildObservableEmulationElement;
+    };
     interface HTMLTestViewChildObservableShadowDomElement extends Components.TestViewChildObservableShadowDom, HTMLStencilElement {
     }
     var HTMLTestViewChildObservableShadowDomElement: {
         prototype: HTMLTestViewChildObservableShadowDomElement;
         new (): HTMLTestViewChildObservableShadowDomElement;
+    };
+    interface HTMLTestViewChildrenObservableEmulationElement extends Components.TestViewChildrenObservableEmulation, HTMLStencilElement {
+    }
+    var HTMLTestViewChildrenObservableEmulationElement: {
+        prototype: HTMLTestViewChildrenObservableEmulationElement;
+        new (): HTMLTestViewChildrenObservableEmulationElement;
+    };
+    interface HTMLTestViewChildrenObservableShadowDomElement extends Components.TestViewChildrenObservableShadowDom, HTMLStencilElement {
+    }
+    var HTMLTestViewChildrenObservableShadowDomElement: {
+        prototype: HTMLTestViewChildrenObservableShadowDomElement;
+        new (): HTMLTestViewChildrenObservableShadowDomElement;
     };
     interface HTMLTestWhileConnectedElement extends Components.TestWhileConnected, HTMLStencilElement {
     }
@@ -87,11 +181,19 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "rx-async": HTMLRxAsyncElement;
+        "test-connected-observable": HTMLTestConnectedObservableElement;
+        "test-content-child-observable-emulation": HTMLTestContentChildObservableEmulationElement;
+        "test-content-child-observable-shadow-dom": HTMLTestContentChildObservableShadowDomElement;
+        "test-content-children-observable-emulation": HTMLTestContentChildrenObservableEmulationElement;
+        "test-content-children-observable-shadow-dom": HTMLTestContentChildrenObservableShadowDomElement;
         "test-from-event": HTMLTestFromEventElement;
         "test-properties-observable": HTMLTestPropertiesObservableElement;
         "test-property-observable": HTMLTestPropertyObservableElement;
         "test-schedule-render": HTMLTestScheduleRenderElement;
+        "test-view-child-observable-emulation": HTMLTestViewChildObservableEmulationElement;
         "test-view-child-observable-shadow-dom": HTMLTestViewChildObservableShadowDomElement;
+        "test-view-children-observable-emulation": HTMLTestViewChildrenObservableEmulationElement;
+        "test-view-children-observable-shadow-dom": HTMLTestViewChildrenObservableShadowDomElement;
         "test-while-connected": HTMLTestWhileConnectedElement;
     }
 }
@@ -108,6 +210,16 @@ declare namespace LocalJSX {
          */
         "value"?: AsyncValue;
     }
+    interface TestConnectedObservable {
+    }
+    interface TestContentChildObservableEmulation {
+    }
+    interface TestContentChildObservableShadowDom {
+    }
+    interface TestContentChildrenObservableEmulation {
+    }
+    interface TestContentChildrenObservableShadowDom {
+    }
     interface TestFromEvent {
     }
     interface TestPropertiesObservable {
@@ -116,14 +228,44 @@ declare namespace LocalJSX {
         "foo": string;
     }
     interface TestPropertyObservable {
+        /**
+          * @default null
+         */
+        "property"?: string | null;
     }
     interface TestScheduleRender {
     }
+    interface TestViewChildObservableEmulation {
+        /**
+          * @default false
+         */
+        "show"?: boolean;
+    }
     interface TestViewChildObservableShadowDom {
         /**
-          * @default 'all'
+          * @default false
          */
-        "which"?: 'even' | 'odd' | 'all';
+        "show"?: boolean;
+    }
+    interface TestViewChildrenObservableEmulation {
+        /**
+          * @default ''
+         */
+        "pref"?: string;
+        /**
+          * @default false
+         */
+        "show"?: boolean;
+    }
+    interface TestViewChildrenObservableShadowDom {
+        /**
+          * @default ''
+         */
+        "pref"?: string;
+        /**
+          * @default false
+         */
+        "show"?: boolean;
     }
     interface TestWhileConnected {
     }
@@ -133,17 +275,39 @@ declare namespace LocalJSX {
         "bar": string;
         "baz": string;
     }
+    interface TestPropertyObservableAttributes {
+        "property": string | null;
+    }
+    interface TestViewChildObservableEmulationAttributes {
+        "show": boolean;
+    }
     interface TestViewChildObservableShadowDomAttributes {
-        "which": 'even' | 'odd' | 'all';
+        "show": boolean;
+    }
+    interface TestViewChildrenObservableEmulationAttributes {
+        "pref": string;
+        "show": boolean;
+    }
+    interface TestViewChildrenObservableShadowDomAttributes {
+        "pref": string;
+        "show": boolean;
     }
 
     interface IntrinsicElements {
         "rx-async": RxAsync;
+        "test-connected-observable": TestConnectedObservable;
+        "test-content-child-observable-emulation": TestContentChildObservableEmulation;
+        "test-content-child-observable-shadow-dom": TestContentChildObservableShadowDom;
+        "test-content-children-observable-emulation": TestContentChildrenObservableEmulation;
+        "test-content-children-observable-shadow-dom": TestContentChildrenObservableShadowDom;
         "test-from-event": TestFromEvent;
         "test-properties-observable": Omit<TestPropertiesObservable, keyof TestPropertiesObservableAttributes> & { [K in keyof TestPropertiesObservable & keyof TestPropertiesObservableAttributes]?: TestPropertiesObservable[K] } & { [K in keyof TestPropertiesObservable & keyof TestPropertiesObservableAttributes as `attr:${K}`]?: TestPropertiesObservableAttributes[K] } & { [K in keyof TestPropertiesObservable & keyof TestPropertiesObservableAttributes as `prop:${K}`]?: TestPropertiesObservable[K] } & OneOf<"foo", TestPropertiesObservable["foo"], TestPropertiesObservableAttributes["foo"]> & OneOf<"bar", TestPropertiesObservable["bar"], TestPropertiesObservableAttributes["bar"]> & OneOf<"baz", TestPropertiesObservable["baz"], TestPropertiesObservableAttributes["baz"]>;
-        "test-property-observable": TestPropertyObservable;
+        "test-property-observable": Omit<TestPropertyObservable, keyof TestPropertyObservableAttributes> & { [K in keyof TestPropertyObservable & keyof TestPropertyObservableAttributes]?: TestPropertyObservable[K] } & { [K in keyof TestPropertyObservable & keyof TestPropertyObservableAttributes as `attr:${K}`]?: TestPropertyObservableAttributes[K] } & { [K in keyof TestPropertyObservable & keyof TestPropertyObservableAttributes as `prop:${K}`]?: TestPropertyObservable[K] };
         "test-schedule-render": TestScheduleRender;
+        "test-view-child-observable-emulation": Omit<TestViewChildObservableEmulation, keyof TestViewChildObservableEmulationAttributes> & { [K in keyof TestViewChildObservableEmulation & keyof TestViewChildObservableEmulationAttributes]?: TestViewChildObservableEmulation[K] } & { [K in keyof TestViewChildObservableEmulation & keyof TestViewChildObservableEmulationAttributes as `attr:${K}`]?: TestViewChildObservableEmulationAttributes[K] } & { [K in keyof TestViewChildObservableEmulation & keyof TestViewChildObservableEmulationAttributes as `prop:${K}`]?: TestViewChildObservableEmulation[K] };
         "test-view-child-observable-shadow-dom": Omit<TestViewChildObservableShadowDom, keyof TestViewChildObservableShadowDomAttributes> & { [K in keyof TestViewChildObservableShadowDom & keyof TestViewChildObservableShadowDomAttributes]?: TestViewChildObservableShadowDom[K] } & { [K in keyof TestViewChildObservableShadowDom & keyof TestViewChildObservableShadowDomAttributes as `attr:${K}`]?: TestViewChildObservableShadowDomAttributes[K] } & { [K in keyof TestViewChildObservableShadowDom & keyof TestViewChildObservableShadowDomAttributes as `prop:${K}`]?: TestViewChildObservableShadowDom[K] };
+        "test-view-children-observable-emulation": Omit<TestViewChildrenObservableEmulation, keyof TestViewChildrenObservableEmulationAttributes> & { [K in keyof TestViewChildrenObservableEmulation & keyof TestViewChildrenObservableEmulationAttributes]?: TestViewChildrenObservableEmulation[K] } & { [K in keyof TestViewChildrenObservableEmulation & keyof TestViewChildrenObservableEmulationAttributes as `attr:${K}`]?: TestViewChildrenObservableEmulationAttributes[K] } & { [K in keyof TestViewChildrenObservableEmulation & keyof TestViewChildrenObservableEmulationAttributes as `prop:${K}`]?: TestViewChildrenObservableEmulation[K] };
+        "test-view-children-observable-shadow-dom": Omit<TestViewChildrenObservableShadowDom, keyof TestViewChildrenObservableShadowDomAttributes> & { [K in keyof TestViewChildrenObservableShadowDom & keyof TestViewChildrenObservableShadowDomAttributes]?: TestViewChildrenObservableShadowDom[K] } & { [K in keyof TestViewChildrenObservableShadowDom & keyof TestViewChildrenObservableShadowDomAttributes as `attr:${K}`]?: TestViewChildrenObservableShadowDomAttributes[K] } & { [K in keyof TestViewChildrenObservableShadowDom & keyof TestViewChildrenObservableShadowDomAttributes as `prop:${K}`]?: TestViewChildrenObservableShadowDom[K] };
         "test-while-connected": TestWhileConnected;
     }
 }
@@ -152,11 +316,19 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "rx-async": LocalJSX.IntrinsicElements["rx-async"] & JSXBase.HTMLAttributes<HTMLRxAsyncElement>;
+            "test-connected-observable": LocalJSX.IntrinsicElements["test-connected-observable"] & JSXBase.HTMLAttributes<HTMLTestConnectedObservableElement>;
+            "test-content-child-observable-emulation": LocalJSX.IntrinsicElements["test-content-child-observable-emulation"] & JSXBase.HTMLAttributes<HTMLTestContentChildObservableEmulationElement>;
+            "test-content-child-observable-shadow-dom": LocalJSX.IntrinsicElements["test-content-child-observable-shadow-dom"] & JSXBase.HTMLAttributes<HTMLTestContentChildObservableShadowDomElement>;
+            "test-content-children-observable-emulation": LocalJSX.IntrinsicElements["test-content-children-observable-emulation"] & JSXBase.HTMLAttributes<HTMLTestContentChildrenObservableEmulationElement>;
+            "test-content-children-observable-shadow-dom": LocalJSX.IntrinsicElements["test-content-children-observable-shadow-dom"] & JSXBase.HTMLAttributes<HTMLTestContentChildrenObservableShadowDomElement>;
             "test-from-event": LocalJSX.IntrinsicElements["test-from-event"] & JSXBase.HTMLAttributes<HTMLTestFromEventElement>;
             "test-properties-observable": LocalJSX.IntrinsicElements["test-properties-observable"] & JSXBase.HTMLAttributes<HTMLTestPropertiesObservableElement>;
             "test-property-observable": LocalJSX.IntrinsicElements["test-property-observable"] & JSXBase.HTMLAttributes<HTMLTestPropertyObservableElement>;
             "test-schedule-render": LocalJSX.IntrinsicElements["test-schedule-render"] & JSXBase.HTMLAttributes<HTMLTestScheduleRenderElement>;
+            "test-view-child-observable-emulation": LocalJSX.IntrinsicElements["test-view-child-observable-emulation"] & JSXBase.HTMLAttributes<HTMLTestViewChildObservableEmulationElement>;
             "test-view-child-observable-shadow-dom": LocalJSX.IntrinsicElements["test-view-child-observable-shadow-dom"] & JSXBase.HTMLAttributes<HTMLTestViewChildObservableShadowDomElement>;
+            "test-view-children-observable-emulation": LocalJSX.IntrinsicElements["test-view-children-observable-emulation"] & JSXBase.HTMLAttributes<HTMLTestViewChildrenObservableEmulationElement>;
+            "test-view-children-observable-shadow-dom": LocalJSX.IntrinsicElements["test-view-children-observable-shadow-dom"] & JSXBase.HTMLAttributes<HTMLTestViewChildrenObservableShadowDomElement>;
             "test-while-connected": LocalJSX.IntrinsicElements["test-while-connected"] & JSXBase.HTMLAttributes<HTMLTestWhileConnectedElement>;
         }
     }

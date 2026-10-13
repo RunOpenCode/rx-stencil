@@ -4,40 +4,58 @@ import {
     Host,
     h,
     Method,
+    Prop,
+    State,
 } from '@stencil/core';
 import {
     propertyObservable,
-    setProperty,
+    scheduleRender,
     untilDisconnected,
 } from '../../../../rx';
+
+type Value = {
+    member?: string | null,
+    property?: string | null,
+    state?: string | null,
+}
 
 @Component({
     tag: 'test-property-observable',
 })
 export class TestPropertyObservable implements ComponentInterface {
 
-    // @ts-ignore
-    private prop: string = 'foo';
+    @Prop({
+        mutable: true,
+    })
+    public property: string | null = null;
 
-    private value?: string;
+    @State()
+    public state: string | null = null;
+
+    private member: string | null = null;
 
     public connectedCallback(): void {
-        propertyObservable(this, 'prop')
-            .pipe(untilDisconnected(this))
-            .subscribe(setProperty(this, 'value', {
-                scheduleRender: true,
-            }));
+        propertyObservable(this, 'member')
+            .pipe(
+                scheduleRender(this, false),
+                untilDisconnected(this),
+            )
+            .subscribe();
     }
 
     @Method()
-    public async setValue(value: string): Promise<void> {
-        this.prop = value;
+    public async setValue(value: Value): Promise<void> {
+        this.property = value.property || null;
+        this.state    = value.state || null;
+        this.member   = value.member || null;
     }
 
     public render(): any {
         return (
             <Host>
-                {this.value}
+                {this.property ? `Property: "${this.property}"` : ''}
+                {this.state ? `State: "${this.state}"` : ''}
+                {this.member ? `Member: "${this.member}"` : ''}
             </Host>
         )
     }

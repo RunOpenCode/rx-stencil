@@ -1,8 +1,11 @@
-import { ComponentInterface } from '@stencil/core';
+import {
+    ComponentInterface,
+    getElement,
+} from '@stencil/core';
 import {
     HostRef,
     HTMLStencilElement,
-}                             from '@stencil/core/internal';
+} from '@stencil/core/internal';
 
 /**
  * Describes a node that has been relocated for slot emulation by Stencil.
@@ -54,23 +57,29 @@ export function usesShadowDom(cmp: ComponentInterface): boolean {
 /**
  * Check if a node is an emulated view child node.
  *
- * We are checking if node is a child node of the component which is not
- * in emulated slot.
+ * If `element` is provided, the function will check if the node is emulated view child of that
+ * element. If not, it will just check if the node is an emulated view child.
  *
  * @internal
  */
-export function isEmulatedViewChild(node: Node, element: HTMLStencilElement): boolean {
-    // If the node has the 's-ol' property, it is not an emulated content child.
-    if ('s-ol' in node) {
-        return false;
+export function isEmulatedViewChild(node: Node, element?: HTMLStencilElement): boolean {
+    debugger;
+    if (!element) {
+        return 's-hn' in node;
     }
 
-    // If it is direct child of the component, it is not an emulated content child.
-    if (node.parentElement === element) {
+    if (!('s-hn' in node) || node['s-hn'] !== element.tagName) {
         return false;
     }
-
-    return isEmulatedViewChild(node.parentElement as Node, element);
+    
+    if (!(node instanceof HTMLElement)) {
+        return false;
+    }
+    
+    // Climb up.
+    let parent: HTMLElement | null = node.closest(element.tagName);
+    
+    return parent === element;
 }
 
 /**
@@ -91,4 +100,23 @@ export function getComponentTagName(cmp: ComponentInterface): string {
 export function isRendered(cmp: ComponentInterface): boolean {
     let hostRef: HostRef = getHostRef(cmp);
     return (hostRef.$renderCount$ || 0) > 0;
+}
+
+/**
+ * Wrapper for `componentOnReady()` method of Stencil components.
+ *
+ * @internal
+ */
+export function componentOnReady(element: HTMLElement): Promise<void>;
+export function componentOnReady(cmp: ComponentInterface): Promise<void>;
+export function componentOnReady(target: HTMLElement | ComponentInterface): Promise<void> {
+    let element: HTMLElement = target instanceof HTMLElement ? target : getElement(target);
+
+    if (!(element as HTMLStencilElement).componentOnReady) {
+        return Promise.resolve();
+    }
+
+    return (element as HTMLStencilElement)
+        .componentOnReady()
+        .then((): Promise<void> => Promise.resolve())
 }

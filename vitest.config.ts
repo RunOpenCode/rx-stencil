@@ -1,5 +1,6 @@
 import { defineVitestConfig }  from '@stencil/vitest/config';
 import { stencilVitestPlugin } from '@stencil/vitest/plugin';
+import { playwright }          from '@vitest/browser-playwright';
 
 export default defineVitestConfig({
     stencilConfig: './stencil.config.ts',
@@ -28,6 +29,20 @@ export default defineVitestConfig({
                         stencil: {
                             domEnvironment: 'jsdom',
                         },
+                    },
+                },
+            },
+            {
+                test: {
+                    name:            'browser',
+                    include:         ['src/**/*.test.{ts,tsx}'],
+                    setupFiles:      ['./vitest-setup.ts'],
+                    browser:         {
+                        enabled:            true,
+                        provider:           playwright(),
+                        headless:           true,
+                        instances:          [{browser: 'chromium'}],
+                        screenshotFailures: false,
                     },
                 },
             },
