@@ -5,7 +5,7 @@ import {
     expect,
 }                             from '@stencil/vitest';
 import { Subject }           from 'rxjs';
-import { untilDisconnected }  from '../../../rx';
+import { untilDisconnected }  from '../../../../rx';
 
 describe('untilDisconnected()', (): void => {
 

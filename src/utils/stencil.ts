@@ -63,7 +63,6 @@ export function usesShadowDom(cmp: ComponentInterface): boolean {
  * @internal
  */
 export function isEmulatedViewChild(node: Node, element?: HTMLStencilElement): boolean {
-    debugger;
     if (!element) {
         return 's-hn' in node;
     }

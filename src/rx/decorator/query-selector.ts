@@ -1,7 +1,7 @@
 import {
     ContentChild,
     ContentChildOptions,
-}                      from './content-child';
+} from './content-child';
 import {
     ViewChild,
     ViewChildOptions,
@@ -17,6 +17,6 @@ export function QuerySelector<E extends Element = Element>(selector: string, opt
     if ('content' === options?.target) {
         return ContentChild<E>(selector, options);
     }
-    
+
     return ViewChild<E>(selector, options);
 }

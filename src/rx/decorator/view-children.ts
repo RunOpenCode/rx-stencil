@@ -1,17 +1,14 @@
 import {
-    Build,
     ComponentInterface,
     getElement,
 }                                 from '@stencil/core';
 import { Observable }             from 'rxjs';
-import { applyOperators }         from '../../utils/decorator';
-import {
-    getRegistry,
-    ValuesRegistry,
-}                                 from '../../utils/values-registry';
-import { viewChildrenObservable } from '../observable/view-children-observable';
+import { applyOperators }         from '../../utils';
+import { viewChildrenObservable } from '../observable';
 import { ElementsFilterFn }       from '../types';
 import { ViewChildOptions }       from './view-child';
+
+let ledger: WeakMap<Element, Record<string, boolean>> = new WeakMap<Element, Record<string, boolean>>();
 
 export type ViewChildrenOptions = Omit<ViewChildOptions, 'filter'> & {
     /**
@@ -24,41 +21,30 @@ export type ViewChildrenOptions = Omit<ViewChildOptions, 'filter'> & {
 
 export function ViewChildren<E extends Element = Element>(selector: string, options?: ViewChildrenOptions): any {
     return function (cmp: ComponentInterface, property: string): void {
-        let connectedCallback: (() => unknown) | undefined = cmp.connectedCallback;
+        let previous: (() => void) | null = cmp.connectedCallback || null;
 
         cmp.connectedCallback = function (): void {
-            this[property]; // Access the property to initialize it and set up the observable.
-            connectedCallback?.call(this);
+            let element: HTMLElement = getElement(this);
+
+            if (!ledger.has(element) || !ledger.get(element)?.[property]) {
+                let observable: Observable<E[]> = viewChildrenObservable<E>(this, selector, options);
+
+                applyOperators(observable, this, options);
+
+                observable
+                    .subscribe((value: E[] | null): void => {
+                        this[property] = value;
+                    });
+
+                let record: Record<string, boolean> = ledger.get(element) || {};
+                record[property]                    = true;
+
+                ledger.set(element, record);
+            }
+
+            if (previous) {
+                previous.call(this);
+            }
         };
-
-        let descriptor: PropertyDescriptor = Object.getOwnPropertyDescriptor(cmp.prototype, property) || {
-            configurable: true,
-            enumerable:   true,
-        };
-
-        delete descriptor['value'];
-        delete descriptor['writable'];
-
-        Object.defineProperty(cmp, property, {
-            ...descriptor,
-            set(this: ComponentInterface, _value: E[]): void {
-                if (Build.isDev) {
-                    console.warn(`@ViewChildren property "${property}" is read-only and cannot be set.`);
-                }
-            },
-            get(this: ComponentInterface): E[] {
-                let element: HTMLElement          = getElement(cmp);
-                let registry: ValuesRegistry<E[]> = getRegistry<E[]>('@ViewChildren');
-
-                if (!registry.has(element, property)) {
-                    let observable: Observable<E[]> = viewChildrenObservable<E>(this, selector, options);
-                    observable                      = applyOperators(observable, this, options);
-
-                    registry.set(element, property, observable);
-                }
-
-                return registry.value(element, property)! as E[];
-            },
-        });
     };
 }

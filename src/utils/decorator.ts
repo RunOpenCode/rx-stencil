@@ -7,10 +7,10 @@ import {
 import {
     ElementFilterFn,
     ElementsFilterFn,
+    ViewChildOptions,
+    ViewChildrenOptions,
+    whileConnected,
 }                              from '../rx';
-import { ViewChildOptions }    from '../rx/decorator/view-child';
-import { ViewChildrenOptions } from '../rx/decorator/view-children';
-import { whileConnected }      from '../rx/operator/while-connected';
 
 type ApplyOperatorsArgs<E extends Element> =
     | [

@@ -1,5 +1,3 @@
-import './test-while-connected.component';
-
 import {
     describe,
     it,
@@ -39,8 +37,7 @@ describe('whileConnected().', (): void => {
 
         await waitForChanges();
 
-        // TODO Failing test? Why?
-        // expect(element).toEqualText('1/2');
+        expect(element).toEqualText('1/2');
     });
 
 });

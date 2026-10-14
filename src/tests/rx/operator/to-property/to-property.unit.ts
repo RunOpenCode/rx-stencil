@@ -5,7 +5,7 @@ import {
     expect,
 }                             from '@stencil/vitest';
 import { Subject }            from 'rxjs';
-import { toProperty }         from '../../../rx';
+import { toProperty }         from '../../../../rx';
 
 describe('toProperty()', (): void => {
 

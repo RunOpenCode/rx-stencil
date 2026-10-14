@@ -1,15 +1,13 @@
+import { ComponentInterface }  from '@stencil/core';
 import {
-    ComponentInterface,
-    getElement,
-} from '@stencil/core';
-import {
+    filter,
     MonoTypeOperatorFunction,
     Observable,
-    Subject,
+    skip,
+    take,
     takeUntil,
-} from 'rxjs';
-
-let observables: WeakMap<HTMLElement, Observable<void>> = new WeakMap();
+}                              from 'rxjs';
+import { connectedObservable } from '../observable';
 
 /**
  * Operator that unsubscribes from the source observable when
@@ -17,22 +15,15 @@ let observables: WeakMap<HTMLElement, Observable<void>> = new WeakMap();
  */
 export function untilDisconnected<T = unknown>(cmp: ComponentInterface): MonoTypeOperatorFunction<T> {
     return (source: Observable<T>): Observable<T> => {
-        let element: HTMLElement = getElement(cmp);
-
-        if (!observables.has(element)) {
-            let observable: Subject<void>          = new Subject<void>()
-            let previous: (() => void) | undefined = cmp.disconnectedCallback
-
-            cmp.disconnectedCallback = function (): void {
-                previous?.call(this);
-                observable.next();
-            }
-            
-            observables.set(element, observable.asObservable())
-        }
+        let signal: Observable<boolean> = connectedObservable(cmp)
+            .pipe(
+                skip(1),
+                filter((isConnected: boolean): boolean => !isConnected),
+                take(1),
+            );
 
         return source.pipe(
-            takeUntil<T>(observables.get(element) as Observable<void>),
+            takeUntil<T>(signal),
         );
     };
 }

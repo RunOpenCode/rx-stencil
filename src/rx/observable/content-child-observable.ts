@@ -79,7 +79,6 @@ export function contentChildObservable<E extends Element = Element>(cmp: Compone
     return mutations.pipe(
         map((): E | null => {
             let candidates: E[] = Array.from(element.querySelectorAll<E>(selector));
-            debugger;
 
             for (let i: number = 0; i < candidates.length; i++) {
                 if (isEmulatedViewChild(candidates[i])) {
