@@ -31,7 +31,6 @@ export class TestContentChildDecoratorEmulation implements ComponentInterface {
     // @ts-ignore
     private _onChildChange(value: HTMLElement | null): void {
         this._value = value?.textContent.trim() || null;
-        console.log('sad');
     }
 
     public render(): any {
