@@ -2,11 +2,11 @@ import { Config } from '@stencil/core';
 import { sass }   from '@stencil/sass';
 
 export const config: Config = {
-    namespace:         'rx-stencil',
-    plugins:           [
+    namespace:     'rx-stencil',
+    plugins:       [
         sass(),
     ],
-    outputTargets:     [
+    outputTargets: [
         {
             type:          'dist',
             esmLoaderPath: '../loader',
@@ -15,19 +15,9 @@ export const config: Config = {
             type: 'dist-custom-elements',
         },
         {
-            type: 'docs-readme',
-        },
-        {
             type:          'www',
             serviceWorker: null, // disable service workers
         },
     ],
-    excludeComponents: [
-        'test-connected-observable',
-        'test-from-event',
-        'test-observe-multiple-props',
-        'test-observe-props',
-        'test-while-connected',
-    ],
-    buildDist:         true,
+    buildDist:     true,
 };

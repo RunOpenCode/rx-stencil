@@ -7,7 +7,7 @@ import {
     State,
     Watch,
 }                       from '@stencil/core';
-import { ContentChild } from '../../../rx';
+import { ContentChild } from '../../../../rx';
 
 @Component({
     tag:    'test-content-child-decorator-emulation',

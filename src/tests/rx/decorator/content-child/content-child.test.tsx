@@ -10,9 +10,15 @@ import {
 
 describe('@ContentChild.', (): void => {
 
-    type Elem = HTMLTestContentChildDecoratorEmulationElement;
+    type Elem = HTMLTestContentChildDecoratorEmulationElement | HTMLTestContentChildDecoratorShadowDomElement;
 
     test.each([
+        [
+            'shadow DOM',
+            <test-content-child-decorator-shadow-dom>
+                <test-content-child-decorator-shadow-dom />
+            </test-content-child-decorator-shadow-dom>,
+        ],
         [
             'emulation',
             <test-content-child-decorator-emulation>
