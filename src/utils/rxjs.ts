@@ -58,7 +58,7 @@ export function distinctUntilElementsChanged<E extends Element = Element>(compar
 }
 
 /**
- * Observe the subtree of an element for mutations.
+ * observe.ts the subtree of an element for mutations.
  *
  * This function returns an observable that emits an array of MutationRecords whenever a mutation occurs
  * in the subtree of the specified element.

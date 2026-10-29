@@ -7,35 +7,10 @@
 
         <script type="module" src="/build/rx-stencil.esm.js"></script>
         <script nomodule src="/build/rx-stencil.js"></script>
-
-        <script type="text/javascript">
-            let element = null;
-
-            document.addEventListener("DOMContentLoaded", () => {
-                element = document.querySelector("test-content-child-decorator-emulation");
-            });
-
-            async function doUpdate() {
-                let elem = document.createElement('div');
-                elem.classList.add('foo');
-                element.appendChild(elem);
-                elem.textContent = 'foo' + Math.random();
-                
-                await Promise.resolve();
-                
-                let value = await element.getValue();
-                console.log(value);
-            }
-        </script>
     </head>
 
 
     <body>
-
-        <button onclick="doUpdate()">Run</button>
-        
-        <test-content-child-decorator-emulation>
-            <test-content-child-decorator-emulation pref="foo" />
-        </test-content-child-decorator-emulation>
+        <test-observe-decorator></test-observe-decorator>
     </body>
 </html>
