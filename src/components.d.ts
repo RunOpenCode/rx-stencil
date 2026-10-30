@@ -47,6 +47,7 @@ export namespace Components {
     interface TestFromEvent {
     }
     interface TestObserveDecorator {
+        "getValue": () => Promise<[number | null, number | null, string | null]>;
     }
     interface TestPropertiesObservable {
         "bar": string;

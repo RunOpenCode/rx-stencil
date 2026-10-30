@@ -14,7 +14,7 @@ with requirements such as debouncing, throttling, retrying, etc.
 > [@runopencode/http](https://github.com/RunOpenCode/http) Stencil can be used to communicate with RESTful APIs through
 > RxJS and observables, instead of using imperative approach with Promises. This allows you to write very
 > complex, glitch-free, components. Of course, you can use this library with any other HTTP client, or fetch API,
-> wrapped by RxJS observables using function "[fromFetch ()](https://rxjs.dev/api/fetch/fromFetch)".
+> wrapped by RxJS observables using function [`fromFetch()`](https://rxjs.dev/api/fetch/fromFetch).
 
 ## Table of contents
 

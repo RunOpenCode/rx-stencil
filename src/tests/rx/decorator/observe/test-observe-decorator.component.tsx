@@ -2,8 +2,9 @@ import {
     Component,
     ComponentInterface,
     h,
+    Method,
     State,
-} from '@stencil/core';
+}                  from '@stencil/core';
 import { Observe } from '../../../../rx';
 
 
@@ -16,10 +17,17 @@ export class TestObserveDecorator implements ComponentInterface {
     @State()
     private _counter: number = 0;
 
-    @Observe('_counter', { immediate: false })
+    private _value: [number | null, number | null, string | null] = [null, null, null];
+
+    @Method()
+    public async getValue(): Promise<[number | null, number | null, string | null]> {
+        return this._value;
+    }
+
+    @Observe('_counter', {immediate: false})
     // @ts-ignore
     private _onCounterChanged(current: number, previous: number, property: string): void {
-        console.log('value', current, previous, property, this._counter);
+        this._value = [current, previous, property];
     }
 
     public render(): any {
