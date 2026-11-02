@@ -20,7 +20,7 @@
     "unpkg": "dist/rx-stencil/rx-stencil.esm.js",
     "repository": {
         "type": "git",
-        "url": "https://github.com/runopencode/rx-stencil"
+        "url": "git+https://github.com/runopencode/rx-stencil.git"
     },
     "files": [
         "dist/",
