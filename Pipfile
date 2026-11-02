@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+click = "*"
+rich = "*"
+python-dotenv = "*"
+pygit2= "*"
+sphinx="*"
+furo="*"
+sphinx-favicon="*"
+sphinx-autobuild = "*"
+sphinx-copybutton = "*"
+sphinx-inline-tabs = "*"
+
+[dev-packages]
+
+[requires]

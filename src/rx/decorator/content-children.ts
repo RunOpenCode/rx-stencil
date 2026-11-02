@@ -3,17 +3,20 @@ import {
     getElement,
 }                                    from '@stencil/core';
 import { Observable }                from 'rxjs';
-import { applyOperators }            from '../../utils';
-import { contentChildrenObservable } from '../observable';
-import { ViewChildrenOptions }       from './view-children';
+import { applyOperators }       from '../../utils';
+import {
+    ContentChildObservableOptions,
+    contentChildrenObservable,
+} from '../observable';
+import { ViewChildrenOptions }  from './view-children';
 
-let ledger: WeakMap<Element, Record<string, boolean>> = new WeakMap<Element, Record<string, boolean>>();
+let ledger: WeakMap<Element, Record<PropertyKey, boolean>> = new WeakMap<Element, Record<PropertyKey, boolean>>();
 
-export type ContentChildrenOptions = ViewChildrenOptions;
+export type ContentChildrenOptions = ViewChildrenOptions & ContentChildObservableOptions;
 
-export function ContentChildren<E extends Element = Element>(selector: string, options?: ContentChildrenOptions): any {
-    return function (cmp: ComponentInterface, property: string): void {
-        let previous: (() => void) | null = cmp.connectedCallback || null;
+export function ContentChildren<E extends Element = Element>(selector: string, options?: ContentChildrenOptions): PropertyDecorator {
+    return function (cmp: ComponentInterface, property: PropertyKey): void {
+        let previous: (() => void) | undefined = cmp.connectedCallback;
 
         cmp.connectedCallback = function (): void {
             let element: HTMLElement = getElement(this);
@@ -24,12 +27,12 @@ export function ContentChildren<E extends Element = Element>(selector: string, o
                 applyOperators(observable, this, options);
 
                 observable
-                    .subscribe((value: E[] | null): void => {
-                        this[property] = value;
+                    .subscribe((value: E[]): void => {
+                        (this as Record<PropertyKey, E[]>)[property] = value;
                     });
 
-                let record: Record<string, boolean> = ledger.get(element) || {};
-                record[property]                    = true;
+                let record: Record<PropertyKey, boolean> = ledger.get(element) || {};
+                record[property]                         = true;
 
                 ledger.set(element, record);
             }

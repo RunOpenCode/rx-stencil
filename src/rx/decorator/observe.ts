@@ -8,19 +8,17 @@ import {
 import { propertyObservable } from '../observable';
 import { whileConnected }     from '../operator';
 
-type Method<T, A extends unknown[], R> = (this: T, ...args: A) => R;
-
 export type ObserveOptions = {
     immediate?: boolean;
     whileConnected?: boolean;
 }
 
-export function Observe(property: string, options?: ObserveOptions) {
-    return function <T, A extends unknown[], R>(
+export function Observe(property: PropertyKey, options?: ObserveOptions): MethodDecorator {
+    return function <T>(
         target: object,
         method: string | symbol,
-        descriptor: TypedPropertyDescriptor<Method<T, A, R>>,
-    ): TypedPropertyDescriptor<Method<T, A, R>> {
+        descriptor: TypedPropertyDescriptor<T>,
+    ): TypedPropertyDescriptor<T> {
         let previous: (() => void) | undefined = (target as any).connectedCallback;
 
         (target as any).connectedCallback = function (): void {

@@ -32,9 +32,9 @@ export class TestPropertiesObservable implements ComponentInterface {
     private _value: string | undefined = undefined;
 
     public connectedCallback(): void {
-        propertiesObservable<[string, string, string]>(this, 'foo', 'bar', 'baz')
+        propertiesObservable(this, 'foo', 'bar', 'baz')
             .pipe(
-                map(([foo, bar, baz]: [string, string, string]): void => {
+                map(({foo, bar, baz}): void => {
                     this._value = `Foo: "${foo}", Bar: "${bar}", Baz: "${baz}"`;
                 }),
                 untilDisconnected(this),

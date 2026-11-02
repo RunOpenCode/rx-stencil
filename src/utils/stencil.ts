@@ -37,7 +37,12 @@ export function getHostRef(cmp: ComponentInterface): HostRef {
  *
  * @internal
  */
-export function isPropOrState(cmp: ComponentInterface, property: string): boolean {
+export function isPropOrState(cmp: ComponentInterface, property: PropertyKey): boolean {
+    // Only string properties can be decorated with @Prop or @State.
+    if (typeof property !== 'string') {
+        return false;
+    }
+    
     let hostRef: HostRef = getHostRef(cmp);
     return !!hostRef.$cmpMeta$.$members$![property];
 }

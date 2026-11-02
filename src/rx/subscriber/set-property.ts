@@ -26,20 +26,20 @@ export type SetPropertyOptions = {
  * emits a new value.
  *
  * @param {ComponentInterface} cmp Component instance on which the property is to be set.
- * @param {string} property Name of the property to be set on the component.
+ * @param {PropertyKey} property Name of the property to be set on the component.
  * @param {SetPropertyOptions} options Options to control the behavior of the property setter,
- *                                     such as whether to schedule a render and whether to do 
+ *                                     such as whether to schedule a render and whether to do
  *                                     it on the next tick.
  */
-export function setProperty<T = any>(cmp: ComponentInterface, property: string, options: SetPropertyOptions = {}): (value: T) => void {
+export function setProperty<T = any>(cmp: ComponentInterface, property: PropertyKey, options?: SetPropertyOptions): (value: T) => void {
     let resolvedOptions: SetPropertyOptions = {
         scheduleRender: false,
         nextTick:       true,
-        ...options,
+        ...(options || {}),
     };
 
     return (value: T): void => {
-        cmp[property] = value;
+        (cmp as Record<PropertyKey, T>)[property] = value;
 
         if (!resolvedOptions.scheduleRender) {
             return;

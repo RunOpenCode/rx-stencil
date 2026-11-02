@@ -8,7 +8,7 @@ import { viewChildrenObservable } from '../observable';
 import { ElementsFilterFn }       from '../types';
 import { ViewChildOptions }       from './view-child';
 
-let ledger: WeakMap<Element, Record<string, boolean>> = new WeakMap<Element, Record<string, boolean>>();
+let ledger: WeakMap<Element, Record<PropertyKey, boolean>> = new WeakMap<Element, Record<PropertyKey, boolean>>();
 
 export type ViewChildrenOptions = Omit<ViewChildOptions, 'filter'> & {
     /**
@@ -19,8 +19,8 @@ export type ViewChildrenOptions = Omit<ViewChildOptions, 'filter'> & {
     filter?: boolean | ElementsFilterFn;
 }
 
-export function ViewChildren<E extends Element = Element>(selector: string, options?: ViewChildrenOptions): any {
-    return function (cmp: ComponentInterface, property: string): void {
+export function ViewChildren<E extends Element = Element>(selector: string, options?: ViewChildrenOptions): PropertyDecorator {
+    return function (cmp: ComponentInterface, property: PropertyKey): void {
         let previous: (() => void) | null = cmp.connectedCallback || null;
 
         cmp.connectedCallback = function (): void {
@@ -32,12 +32,12 @@ export function ViewChildren<E extends Element = Element>(selector: string, opti
                 applyOperators(observable, this, options);
 
                 observable
-                    .subscribe((value: E[] | null): void => {
-                        this[property] = value;
+                    .subscribe((value: E[]): void => {
+                        (this as Record<PropertyKey, E[]>)[property] = value;
                     });
 
-                let record: Record<string, boolean> = ledger.get(element) || {};
-                record[property]                    = true;
+                let record: Record<PropertyKey, boolean> = ledger.get(element) || {};
+                record[property]                         = true;
 
                 ledger.set(element, record);
             }

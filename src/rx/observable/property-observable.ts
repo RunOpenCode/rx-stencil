@@ -14,7 +14,7 @@ import {
     isPropOrState,
 }                  from '../../utils';
 
-type SubjectsMap = Record<string, BehaviorSubject<any>>;
+type SubjectsMap = Record<PropertyKey, BehaviorSubject<unknown>>;
 
 /**
  * A WeakMap to store BehaviorSubjects for each component property.
@@ -33,7 +33,22 @@ const WATCHER_CALLBACK_NAME: string = '__runopencode_rx_stencil_watcher';
 /**
  * Returns an observable that emits property value when the component property value changes.
  */
-export function propertyObservable<T = any>(cmp: ComponentInterface, property: string): Observable<T | undefined> {
+// Infer public property type.
+export function propertyObservable<
+    C extends ComponentInterface,
+    K extends keyof C
+>(
+    cmp: C,
+    property: K,
+): Observable<C[K]>;
+
+// Explicitly specify property type.
+export function propertyObservable<T = unknown>(
+    cmp: ComponentInterface,
+    property: PropertyKey,
+): Observable<T>;
+
+export function propertyObservable(cmp: ComponentInterface, property: PropertyKey): Observable<unknown> {
     let element: HTMLElement = getElement(cmp);
     let initialize: boolean  = false;
 
@@ -42,7 +57,7 @@ export function propertyObservable<T = any>(cmp: ComponentInterface, property: s
     }
 
     if (!subjects.get(element)![property]) {
-        subjects.get(element)![property] = new BehaviorSubject<T | undefined>((cmp as any)[property] as T | undefined);
+        subjects.get(element)![property] = new BehaviorSubject<unknown>((cmp as any)[property]);
         initialize                       = true;
     }
 
@@ -52,8 +67,8 @@ export function propertyObservable<T = any>(cmp: ComponentInterface, property: s
             .pipe(distinctUntilChanged());
     }
 
-    let subject: BehaviorSubject<T | undefined> = subjects.get(element)![property] as BehaviorSubject<T | undefined>;
-    let isMember: boolean                       = isPropOrState(cmp, property);
+    let subject: BehaviorSubject<unknown> = subjects.get(element)![property] as BehaviorSubject<unknown>;
+    let isMember: boolean                 = isPropOrState(cmp, property);
 
     // If the property is not a member of the component (not decorated with @Prop or @State), 
     // we can watch it by modifying the property descriptor directly.
@@ -61,10 +76,10 @@ export function propertyObservable<T = any>(cmp: ComponentInterface, property: s
         let descriptor: PropertyDescriptor | undefined = Object.getOwnPropertyDescriptor(cmp, property);
 
         Object.defineProperty(cmp, property, {
-            get(this: ComponentInterface): T | undefined {
+            get(this: ComponentInterface): unknown {
                 return subject.value;
             },
-            set(this: ComponentInterface, value: T | undefined): void {
+            set(this: ComponentInterface, value: unknown): void {
                 subject.next(value);
 
                 if (descriptor && descriptor.set) {
@@ -92,15 +107,15 @@ export function propertyObservable<T = any>(cmp: ComponentInterface, property: s
         // $watchers$ object needs to exist so we can add them for property.
         hostRef.$cmpMeta$.$watchers$ = hostRef.$cmpMeta$.$watchers$ || {};
         // Finally, we need to register the watcher callback function on the component instance.
-        cmp[WATCHER_CALLBACK_NAME]   = function (current: T | undefined, _previous: T | undefined, property: string): void {
-            let element: HTMLElement                    = getElement(this);
-            let subject: BehaviorSubject<T | undefined> = subjects.get(element)![property] as BehaviorSubject<T | undefined>;
+        cmp[WATCHER_CALLBACK_NAME]   = function (current: unknown, _previous: unknown, property: string): void {
+            let element: HTMLElement              = getElement(this);
+            let subject: BehaviorSubject<unknown> = subjects.get(element)![property] as BehaviorSubject<unknown>;
             subject.next(current);
         }
     }
 
-    hostRef.$cmpMeta$.$watchers$![property] = hostRef.$cmpMeta$.$watchers$![property] || [];
-    hostRef.$cmpMeta$.$watchers$![property].push({
+    hostRef.$cmpMeta$.$watchers$![property as string] = hostRef.$cmpMeta$.$watchers$![property as string] || [];
+    hostRef.$cmpMeta$.$watchers$![property as string].push({
         [WATCHER_CALLBACK_NAME]: 0,
     });
 

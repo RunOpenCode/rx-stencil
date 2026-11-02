@@ -10,7 +10,7 @@ import {
 }                          from '../observable';
 import { ElementFilterFn } from '../types';
 
-let ledger: WeakMap<Element, Record<string, boolean>> = new WeakMap<Element, Record<string, boolean>>();
+let ledger: WeakMap<Element, Record<PropertyKey, boolean>> = new WeakMap<Element, Record<PropertyKey, boolean>>();
 
 export type ViewChildOptions = {
     /**
@@ -39,8 +39,8 @@ export type ViewChildOptions = {
     whileConnected?: boolean;
 } & ViewChildObservableOptions;
 
-export function ViewChild<E extends Element = Element>(selector: string, options?: ViewChildOptions): any {
-    return function (cmp: ComponentInterface, property: string): void {
+export function ViewChild<E extends Element = Element>(selector: string, options?: ViewChildOptions): PropertyDecorator {
+    return function (cmp: ComponentInterface, property: PropertyKey): void {
         let previous: (() => void) | null = cmp.connectedCallback || null;
 
         cmp.connectedCallback = function (): void {
@@ -53,11 +53,11 @@ export function ViewChild<E extends Element = Element>(selector: string, options
 
                 observable
                     .subscribe((value: E | null): void => {
-                        this[property] = value;
+                        (this as Record<PropertyKey, E | null>)[property] = value;
                     });
 
-                let record: Record<string, boolean> = ledger.get(element) || {};
-                record[property]                    = true;
+                let record: Record<PropertyKey, boolean> = ledger.get(element) || {};
+                record[property]                         = true;
 
                 ledger.set(element, record);
             }
