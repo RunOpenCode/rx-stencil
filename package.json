@@ -28,7 +28,7 @@
         "docs/"
     ],
     "scripts": {
-        "clean": "rimraf dist && rimraf .stencil",
+        "clean": "rimraf dist && rimraf .stencil && rimraf src/components.d.ts",
         "build": "npm run clean && stencil build --config='./stencil.config.prod.ts'",
         "start": "npm run clean && stencil build --dev --watch --serve",
         "test": "npm run clean && stencil-test --coverage",
