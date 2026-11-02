@@ -17,6 +17,10 @@ All libraries are published under MIT licence and hosted on `GitHub`_.
 
 |npm|
 
+.. code-block:: console
+
+    npm install @runopencode/rx-stencil
+
 Introduction
 ------------
 
